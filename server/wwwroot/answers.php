@@ -1,6 +1,8 @@
 <?php
 
-$pic_id = $_PATH['pic_id'] or error("need a pic_id");
+$_GET or error("No _GET");
+
+$pic_id = $_GET["pic_id"] or error("need a pic_id");
 
 is_numeric($pic_id) or error("pic_id is not numeric");
 $pic_id = intval($pic_id);
@@ -11,8 +13,11 @@ $sql = mysqli_init() or error("Unable to init mysql");
 $sql->real_connect(ini_get("mysql.default_host"), "root") or error("Unable to connect to mysql");
 $sql->select_db('chunky') or error("Unable to select chunky db: ".$sql->error);
 
-$result = $sql->query("SELECT answers.answer AS answer, users.name AS user, answers.date AS date ".
-	"FROM pictures INNER JOIN users ON users.id=answers.user_id WHERE answers.picture_id=".$pic_id)
+$result = $sql->query("SELECT answers.answer AS answer, ".
+	"users.name AS user, ".
+	"answers.date AS date ".
+	"FROM answers INNER JOIN users ON users.id=answers.user_id WHERE answers.picture_id=".$pic_id." ".
+	"ORDER BY answers.date")
 	or error("cant read from answers table: ".$sql->error);
 	
 $message = '{ "result": [';
@@ -33,6 +38,7 @@ while( ($row = $result->fetch_array()) )
 		"\"user\":\"$user\",".
 		"\"date\":\"$date\"".
 	"}";
+	++$id;
 }
 $message .= '] }';
 

@@ -6,6 +6,7 @@ $sql = mysqli_init() or error("Unable to init mysql");
 
 $sql->real_connect() or error("Unable to connect to mysql");
 
+$_POST or error("No POST");
 $username = $sql->real_escape_string($_POST["username"]) or error("need a username");
 $question = $sql->real_escape_string($_POST["question"]) or error("need a question");
 
