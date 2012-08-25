@@ -2,7 +2,13 @@
 
 // filename: upload.php 
 
-// first let's set some variables 
+$sql = mysqli_init() or error("Unable to init mysql");
+
+$sql->real_connect() or error("Unable to connect to mysql");
+
+$username = $sql->real_escape_string($_POST["username"]) or error("need a username");
+$question = $sql->real_escape_string($_POST["question"]) or error("need a question");
+
 
 // make a note of the current working directory, relative to root. 
 $directory_self = str_replace(basename($_SERVER['PHP_SELF']), '', $_SERVER['PHP_SELF']); 
@@ -33,19 +39,21 @@ isset($_POST['submit'])
     or error('the upload form is neaded', $uploadForm); 
 */
 
-// check for PHP's built-in uploading errors 
+// check for PHP's built-in uploading errors
+($_FILES) or error("No files uploaded");
+($_FILES[$fieldname]) or error("No file field in files"); 
 ($_FILES[$fieldname]['error'] == 0) 
-    or error($errors[$_FILES[$fieldname]['error']], $uploadForm); 
+    or error($errors[$_FILES[$fieldname]['error']]); 
      
 // check that the file we are working on really was the subject of an HTTP upload 
 @is_uploaded_file($_FILES[$fieldname]['tmp_name']) 
-    or error('not an HTTP upload', $uploadForm); 
+    or error('not an HTTP upload'); 
      
 // validation... since this is an image upload script we should run a check   
 // to make sure the uploaded file is in fact an image. Here is a simple check: 
 // getimagesize() returns false if the file tested is not an image. 
 @getimagesize($_FILES[$fieldname]['tmp_name']) 
-    or error('only image uploads are allowed', $uploadForm); 
+    or error('only image uploads are allowed'); 
      
 // make a unique filename for the uploaded file and check it is not already 
 // taken... if it is already taken keep trying until we find a vacant one 
@@ -59,14 +67,9 @@ while(file_exists($uploadFilename = $uploadsDirectory.$uploadFilename))
 } 
 
 // now let's move the file to its final location and allocate the new filename to it 
-@move_uploaded_file($_FILES[$fieldname]['tmp_name'], $uploadFilename) 
-    or error('receiving directory insuffiecient permission', $uploadForm);
+@move_uploaded_file($_FILES[$fieldname]['tmp_name'], $uploadsDirectory.$uploadFilename) 
+    or error('receiving directory insuffiecient permission');
    
-$sql = mysqli_init() or error("Unable to init mysql", $uploadForm);
-
-$sql->real_connect() or error("Unable to connect to mysql", $uploadForm);
-
-$username = $sql->real_escape_string($_POST["username"]) or error("need a username", $uploadForm);
 
 $result = $sql->query("SELECT id FROM users WHERE name=".$username) or error("cant find userid");
 ($result->num_rows == 1) or error("cant find userid");
@@ -74,9 +77,17 @@ $result = $sql->query("SELECT id FROM users WHERE name=".$username) or error("ca
 $row = $result->fetch_row();
 $userid = $row['id'];
 
-$sql->query("INSERT INTO pictures (user_id, rel_path) VALUES ($userid, $uploadFilename)") or error("cant insert into pictures");
+$sql->query("INSERT INTO pictures (user_id, rel_path) VALUES ($userid, $uploadFilename)")
+	or error("cant insert into pictures");
+	
+$id = $sql->insert_id or error("File uploaded, but no id in database");
 
+$message = '{ '.
+	"\"result\":$id".
+'}';
 
+echo $message;
+ 
 
 
 
@@ -88,11 +99,16 @@ header('Location: ' . $uploadSuccess);
 
 // The following function is an error handler which is used 
 // to output an HTML error page if the file upload fails 
-function error($error, $location, $seconds = 5) 
+function error($error, $seconds = 5) 
 { 
     echo '{'.
 	"\"error\": \"$error\"".
 	'}';
+	
+	if(isset($uploadFilename, $uploadsDirectory))
+	{
+		unlink($uploadsDirectory.$uploadFilename);
+	}
     exit; 
 } // end error handler 
 
