@@ -40,10 +40,10 @@ while( ($row = $result->fetch_array()) )
 	$pic_id = $row['id'];
 	$username = $row['user'];
 	$path = $row['path'];
-	$question = $row['question'];
+	$question = $row['question'] or "";
 	$date = $row['date'];
 	
-	($pic_id && $username && $path && $question) or error("row $id is no good");
+	($pic_id && $username && $path) or error("row $id is no good");
 	
 	$message .= "{".
 		"\"pic_id\":\"$pic_id\",".

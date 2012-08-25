@@ -7,12 +7,12 @@ include_once "newuser.php";
 
 $sql = mysqli_init() or error("Unable to init mysql");
 
-$sql->real_connect() or error("Unable to connect to mysql");
+$sql->real_connect(ini_get("mysql.default_host"), "root") or error("Unable to connect to mysql");
 $sql->select_db('chunky') or error("Unable to select chunky db: ".$sql->error);
 
 $_POST or error("No POST");
 $username = $sql->real_escape_string($_POST["username"]) or error("need a username");
-$question = $sql->real_escape_string($_POST["question"]) or error("need a question");
+$question = $sql->real_escape_string($_POST["question"]) or "";
 $file = $_POST["file"] or error("need an image");
 
 // make a note of the current working directory, relative to root. 
@@ -67,11 +67,11 @@ isset($_POST['submit'])
 // taken... if it is already taken keep trying until we find a vacant one 
 // sample filename: 1140732936-filename.jpg 
 $now = time(); 
-$uploadFilename = $now.'.jpg';
+$uploadFilename = $now.'.jpeg';
 while(file_exists($uploadsDirectory.$uploadFilename)) 
 { 
     $now++; 
-	$uploadFilename = $now.'.jpg';
+	$uploadFilename = $now.'.jpeg';
 } 
 
 /*
@@ -86,7 +86,7 @@ base64_decode_image($file, $uploadsDirectory.$uploadFilename);
 $userid = getUserId($sql, $username)
 	or error("cant find userid");
 
-$sql->query("INSERT INTO pictures (user_id, rel_path) VALUES ($userid, $uploadFilename)")
+$sql->query("INSERT INTO pictures (user_id, rel_path) VALUES ('$userid', '$uploadFilename')")
 	or error("cant insert into pictures");
 	
 $id = $sql->insert_id or error("File uploaded, but no id in database");
