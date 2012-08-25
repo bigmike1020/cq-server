@@ -3,58 +3,62 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/ic_launcher"
+        android:visibility="invisible" />
+
     <Button
         android:id="@+id/newPictureButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginLeft="40dp"
-        android:layout_marginTop="50dp"
-        android:text="Button" />
+        android:layout_below="@+id/imageView1"
+        android:text="Take picture" />
 
     <Button
         android:id="@+id/existingPictureButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/newPictureButton"
-        android:layout_marginLeft="29dp"
-        android:layout_toRightOf="@+id/newPictureButton"
+        android:layout_below="@+id/imageView1"
+        android:layout_alignParentRight="true"
         android:text="Upload picture" />
+    
 
     <EditText
         android:id="@+id/textView"
         android:layout_width="wrap_content"
-        android:layout_height="150dp"
-        android:layout_alignLeft="@+id/newPictureButton"
-        android:layout_alignRight="@+id/existingPictureButton"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
         android:layout_below="@+id/newPictureButton"
-        android:layout_marginTop="46dp"
+        android:ems="10"
         android:hint="What would you like to know?"
         android:inputType="text"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textSize="@dimen/padding_large" >
-
-        <requestFocus />
-    </EditText>
+        android:visibility="invisible"
+        android:textSize="@dimen/padding_large" />
 
     <Button
         android:id="@+id/submitButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/textView"
-        android:layout_alignLeft="@+id/textView"
         android:layout_below="@+id/textView"
-        android:layout_marginTop="32dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="21dp"
+        android:visibility="invisible"
         android:text="Submit" />
 
-    <ImageView
-        android:id="@+id/imageView1"
+    <TextView
+        android:id="@+id/errorTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/newPictureButton"
-        android:layout_toRightOf="@+id/newPictureButton"
-        android:src="@drawable/ic_launcher" 
-        android:visibility="invisible" />
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:text="Error Uploading Image"
+        android:visibility="invisible"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
 </RelativeLayout>

@@ -1,6 +1,24 @@
 package com.icm;
 
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpVersion;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.CoreProtocolPNames;
+import org.apache.http.params.HttpParams;
+
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -8,9 +26,12 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
@@ -20,14 +41,26 @@ public class TakePictureActivity extends SherlockActivity {
 	private static final int CAMERA_REQUEST = 1000;
 	private static final int RESULT_LOAD_IMAGE = 1001;
 	private ImageView imageView;
+	private EditText questionText;
+	private Button submitQuestion;
+	private TextView errorText;
+	
+	private DefaultHttpClient mHttpClient;
 	
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
+        HttpParams params = new BasicHttpParams();
+        params.setParameter(CoreProtocolPNames.PROTOCOL_VERSION, HttpVersion.HTTP_1_1);
+        mHttpClient = new DefaultHttpClient(params);
+        
         setContentView(R.layout.activity_takepicture);
 		getSupportActionBar().setHomeButtonEnabled(true);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         this.imageView = (ImageView)this.findViewById(R.id.imageView1);
+        this.questionText = (EditText)this.findViewById(R.id.textView);
+        this.errorText = (TextView)this.findViewById(R.id.errorTextView);
         Button cameraButton = (Button) this.findViewById(R.id.newPictureButton);
         cameraButton.setOnClickListener(new View.OnClickListener(){
 			
@@ -44,6 +77,14 @@ public class TakePictureActivity extends SherlockActivity {
 			public void onClick(View v) {
 				Intent cameraIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 				startActivityForResult(cameraIntent, RESULT_LOAD_IMAGE);
+			}
+		});
+        this.submitQuestion = (Button)this.findViewById(R.id.submitButton);
+        submitQuestion.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Upload();
+				finish();
 			}
 		});
 	}
@@ -68,15 +109,50 @@ public class TakePictureActivity extends SherlockActivity {
             String picturePath = cursor.getString(columnIndex);
             cursor.close();
              
-            imageView.setImageBitmap(BitmapFactory.decodeFile(picturePath));
-            imageView.setVisibility(View.VISIBLE);
+            setImageInView(BitmapFactory.decodeFile(picturePath));
         }
     
 		if(requestCode == CAMERA_REQUEST) {
-			Bitmap photo = (Bitmap) data.getExtras().get("data");
-			imageView.setImageBitmap(photo);
-			imageView.setVisibility(View.VISIBLE);
+			setImageInView((Bitmap) data.getExtras().get("data"));
 		}
+	}
+	
+	private void setImageInView(Bitmap photo){
+		imageView.setImageBitmap(photo);
+        imageView.setVisibility(View.VISIBLE);
+		questionText.setVisibility(View.VISIBLE);
+		submitQuestion.setVisibility(View.VISIBLE);
+		errorText.setVisibility(View.INVISIBLE);
+	}
+	
+	public void Upload(){
+        // Create a new HttpClient and Post Header
+        HttpClient httpclient = new DefaultHttpClient();
+        HttpPost httppost = new HttpPost("http://192.168.8.146/chunky/upload.php");
+
+        try {
+            // Add your data
+            List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(3);
+            
+            ByteArrayOutputStream bao = new ByteArrayOutputStream();
+            imageView.getDrawingCache().compress(Bitmap.CompressFormat.JPEG, 90, bao);
+            byte [] ba = bao.toByteArray();
+            int flags = Base64.NO_WRAP | Base64.URL_SAFE;
+            String ba1=Base64.encodeToString(ba, flags);
+            
+            nameValuePairs.add(new BasicNameValuePair("file", ba1));
+            nameValuePairs.add(new BasicNameValuePair("username", "Anonymous"));
+            nameValuePairs.add(new BasicNameValuePair("question", (String) questionText.getText().toString()));
+            httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+
+            // Execute HTTP Post Request
+            HttpResponse response = httpclient.execute(httppost);
+
+        } catch (ClientProtocolException e) {
+            // TODO Auto-generated catch block
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+        }
 	}
 
 	@Override
