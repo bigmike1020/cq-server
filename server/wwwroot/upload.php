@@ -2,6 +2,9 @@
 
 // filename: upload.php 
 
+include_once "error.php";
+include_once "newuser.php";
+
 $sql = mysqli_init() or error("Unable to init mysql");
 
 $sql->real_connect() or error("Unable to connect to mysql");
@@ -72,11 +75,8 @@ while(file_exists($uploadFilename = $uploadsDirectory.$uploadFilename))
     or error('receiving directory insuffiecient permission');
    
 
-$result = $sql->query("SELECT id FROM users WHERE name=".$username) or error("cant find userid");
-($result->num_rows == 1) or error("cant find userid");
-
-$row = $result->fetch_row();
-$userid = $row['id'];
+$userid = getUserId($sql, $username)
+	or error("cant find userid");
 
 $sql->query("INSERT INTO pictures (user_id, rel_path) VALUES ($userid, $uploadFilename)")
 	or error("cant insert into pictures");
@@ -90,6 +90,7 @@ $message = '{ '.
 echo $message;
  
 
+$sql->close();
 
 
 /*   
@@ -97,20 +98,4 @@ echo $message;
 // We are now going to redirect the client to a success page. 
 header('Location: ' . $uploadSuccess); 
 */
-
-// The following function is an error handler which is used 
-// to output an HTML error page if the file upload fails 
-function error($error, $seconds = 5) 
-{ 
-    echo '{'.
-	"\"error\": \"$error\"".
-	'}';
-	
-	if(isset($uploadFilename, $uploadsDirectory))
-	{
-		unlink($uploadsDirectory.$uploadFilename);
-	}
-    exit; 
-} // end error handler 
-
 ?>

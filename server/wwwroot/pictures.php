@@ -1,5 +1,7 @@
 <?php
 
+include_once "error.php";
+
 $sql = mysqli_init() or error("Unable to init mysql");
 
 $sql->real_connect(ini_get("mysql.default_host"), "root") or error("Unable to connect to mysql");
@@ -42,18 +44,6 @@ $message .= '] }';
 
 echo $message;
 
-exit;
-
-
-
-// The following function is an error handler which is used 
-// to output an HTML error page if the file upload fails 
-function error($error, $seconds = 5) 
-{ 
-    echo '{'.
-	"\"error\": \"$error\"".
-	'}';
-    exit; 
-} // end error handler 
+$sql->close();
 
 ?>
