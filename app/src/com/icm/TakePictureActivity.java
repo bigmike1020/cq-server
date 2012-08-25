@@ -1,21 +1,8 @@
 package com.icm;
 
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.ExecutionException;
-
-import org.apache.http.HttpResponse;
 import org.apache.http.HttpVersion;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.CoreProtocolPNames;
 import org.apache.http.params.HttpParams;
@@ -27,7 +14,6 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -125,11 +111,17 @@ public class TakePictureActivity extends SherlockActivity {
 	}
 	
 	private void setImageInView(Bitmap photo){
-		imageView.setDrawingCacheEnabled(true);
+<<<<<<< HEAD
 		imageView.setImageBitmap(photo);
-		imageView.buildDrawingCache(true);
-		uploadedImage = Bitmap.createBitmap(imageView.getDrawingCache());
-		imageView.setDrawingCacheEnabled(false);
+		uploadedImage = photo;
+=======
+		//imageView.setDrawingCacheEnabled(true);
+		imageView.setImageBitmap(photo);
+		//imageView.buildDrawingCache(true);
+		uploadedImage = photo;//Bitmap.createBitmap(imageView.getDrawingCache());
+		//imageView.setDrawingCacheEnabled(false);
+		//uploadedImage = photo;
+>>>>>>> 5b44e614d6c18c52df7fb9bebadd2d8905e8894d
 		
         imageView.setVisibility(View.VISIBLE);
 		questionText.setVisibility(View.VISIBLE);
@@ -142,7 +134,12 @@ public class TakePictureActivity extends SherlockActivity {
 		
 		UploadArgs arg = new UploadArgs();
 		arg.question = (String) questionText.getText().toString();
-		arg.username = (String) userName.getText().toString();
+		
+		String username = userName.getText().toString();
+		if (username == null || username.equals("")) {
+			username = "Anonymous";
+		}
+		arg.username = username;
 		arg.image = uploadedImage;
 		
 		UploadPictureTask task= new UploadPictureTask();

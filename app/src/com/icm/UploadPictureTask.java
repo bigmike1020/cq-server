@@ -17,7 +17,6 @@ import org.apache.http.message.BasicNameValuePair;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.util.Base64;
-import android.util.Log;
 
 public class UploadPictureTask extends AsyncTask<UploadArgs, Void, Void> {
 
@@ -46,7 +45,6 @@ public class UploadPictureTask extends AsyncTask<UploadArgs, Void, Void> {
 
             // Execute HTTP Post Request
             HttpResponse response = httpclient.execute(httppost);
-
         } catch (ClientProtocolException e) {
             // TODO Auto-generated catch block
         } catch (IOException e) {

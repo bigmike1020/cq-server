@@ -14,10 +14,15 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ListAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
 
 import com.actionbarsherlock.app.SherlockActivity;
+import com.actionbarsherlock.view.MenuItem;
 import com.icm.pojo.AnswerResultBean;
 import com.icm.pojo.ImageBean;
 import com.icm.util.GsonStuff;
@@ -34,6 +39,21 @@ public class AnswerActivity extends SherlockActivity {
 		String path = getIntent().getStringExtra("path");
 		final int id = getIntent().getIntExtra("id", 1);
 		AnswerResultBean resultBean = GsonStuff.beanFromPictureId(id);
+		
+		if (resultBean != null) {
+			TextView textView = (TextView) findViewById(R.id.answer_questionTextView);
+			textView.setText(getIntent().getStringExtra("question"));
+			
+			
+			ListView listView = (ListView) findViewById(R.id.answer_list_view);
+			String array[] = new String[resultBean.result.length];
+			for(int i = 0; i < array.length && i < 3; i++) {
+				array[i] = resultBean.result[i].user + " -- " + resultBean.result[i].answer;
+			}
+			
+			ListAdapter adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, array);
+			listView.setAdapter(adapter);
+		}
 		
 		ImageBean bean = new ImageBean();
 		bean.path = path;
@@ -69,6 +89,16 @@ public class AnswerActivity extends SherlockActivity {
 				}.start(); // lol
 			}
 		});
+	}
+	
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		if (item.getItemId() == android.R.id.home) {
+			onBackPressed();
+		}
+		
+		return true;
 	}
 
 }
