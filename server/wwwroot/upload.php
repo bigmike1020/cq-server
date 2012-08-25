@@ -86,7 +86,7 @@ base64_decode_image($file, $uploadsDirectory.$uploadFilename);
 $userid = getUserId($sql, $username)
 	or error("cant find userid");
 
-$sql->query("INSERT INTO pictures (user_id, rel_path) VALUES ('$userid', '$uploadFilename')")
+$sql->query("INSERT INTO pictures (user_id, rel_path, question) VALUES ('$userid', '$uploadFilename', '$question')")
 	or error("cant insert into pictures");
 	
 $id = $sql->insert_id or error("File uploaded, but no id in database");

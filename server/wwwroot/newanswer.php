@@ -7,7 +7,7 @@ $_POST or error("No _GET");
 
 $pic_id = $_POST["pic_id"] or error("need a pic_id");
 $answer = $_POST["answer"] or error("need an answer");
-$user = $_POST["user"] or error("need a user");
+$user = $_POST["user"] or "Anonymous";
 
 is_numeric($pic_id) or error("pic_id is not numeric");
 $pic_id = intval($pic_id);
