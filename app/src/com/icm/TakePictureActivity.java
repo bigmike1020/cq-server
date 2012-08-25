@@ -46,6 +46,7 @@ public class TakePictureActivity extends SherlockActivity {
 	private EditText questionText;
 	private Button submitQuestion;
 	private TextView errorText;
+	private EditText userName;
 	private Bitmap uploadedImage;
 	
 	private DefaultHttpClient mHttpClient;
@@ -65,6 +66,7 @@ public class TakePictureActivity extends SherlockActivity {
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         this.imageView = (ImageView)this.findViewById(R.id.imageView1);
         this.questionText = (EditText)this.findViewById(R.id.textView);
+        this.userName = (EditText)this.findViewById(R.id.userName);
         this.errorText = (TextView)this.findViewById(R.id.errorTextView);
         Button cameraButton = (Button) this.findViewById(R.id.newPictureButton);
         cameraButton.setOnClickListener(new View.OnClickListener(){
@@ -133,13 +135,14 @@ public class TakePictureActivity extends SherlockActivity {
 		questionText.setVisibility(View.VISIBLE);
 		submitQuestion.setVisibility(View.VISIBLE);
 		errorText.setVisibility(View.INVISIBLE);
+		userName.setVisibility(View.VISIBLE);
 	}
 	
 	public void Upload(){
 		
 		UploadArgs arg = new UploadArgs();
 		arg.question = (String) questionText.getText().toString();
-		arg.username = "Anonymous";
+		arg.username = (String) userName.getText().toString();
 		arg.image = uploadedImage;
 		
 		UploadPictureTask task= new UploadPictureTask();
