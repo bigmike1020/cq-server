@@ -5,6 +5,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpVersion;
@@ -27,6 +28,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -44,12 +46,15 @@ public class TakePictureActivity extends SherlockActivity {
 	private EditText questionText;
 	private Button submitQuestion;
 	private TextView errorText;
+	private Bitmap uploadedImage;
 	
 	private DefaultHttpClient mHttpClient;
 	
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
+        uploadedImage = null;
         
         HttpParams params = new BasicHttpParams();
         params.setParameter(CoreProtocolPNames.PROTOCOL_VERSION, HttpVersion.HTTP_1_1);
@@ -118,7 +123,12 @@ public class TakePictureActivity extends SherlockActivity {
 	}
 	
 	private void setImageInView(Bitmap photo){
+		imageView.setDrawingCacheEnabled(true);
 		imageView.setImageBitmap(photo);
+		imageView.buildDrawingCache(true);
+		uploadedImage = Bitmap.createBitmap(imageView.getDrawingCache());
+		imageView.setDrawingCacheEnabled(false);
+		
         imageView.setVisibility(View.VISIBLE);
 		questionText.setVisibility(View.VISIBLE);
 		submitQuestion.setVisibility(View.VISIBLE);
@@ -126,33 +136,17 @@ public class TakePictureActivity extends SherlockActivity {
 	}
 	
 	public void Upload(){
-        // Create a new HttpClient and Post Header
-        HttpClient httpclient = new DefaultHttpClient();
-        HttpPost httppost = new HttpPost("http://192.168.8.146/chunky/upload.php");
-
-        try {
-            // Add your data
-            List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(3);
-            
-            ByteArrayOutputStream bao = new ByteArrayOutputStream();
-            imageView.getDrawingCache().compress(Bitmap.CompressFormat.JPEG, 90, bao);
-            byte [] ba = bao.toByteArray();
-            int flags = Base64.NO_WRAP | Base64.URL_SAFE;
-            String ba1=Base64.encodeToString(ba, flags);
-            
-            nameValuePairs.add(new BasicNameValuePair("file", ba1));
-            nameValuePairs.add(new BasicNameValuePair("username", "Anonymous"));
-            nameValuePairs.add(new BasicNameValuePair("question", (String) questionText.getText().toString()));
-            httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-
-            // Execute HTTP Post Request
-            HttpResponse response = httpclient.execute(httppost);
-
-        } catch (ClientProtocolException e) {
-            // TODO Auto-generated catch block
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-        }
+		
+		UploadArgs arg = new UploadArgs();
+		arg.question = (String) questionText.getText().toString();
+		arg.username = "Anonymous";
+		arg.image = uploadedImage;
+		
+		UploadPictureTask task= new UploadPictureTask();
+		Log.w("test", "before execute");
+		task.execute(arg);
+		Log.w("test", "after execute");
+		this.finish();
 	}
 
 	@Override

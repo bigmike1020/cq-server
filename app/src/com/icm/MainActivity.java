@@ -1,5 +1,8 @@
 package com.icm;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -27,10 +30,28 @@ public class MainActivity extends SherlockListActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        final Activity context = this;
         
+        ResultBeanTask task = new ResultBeanTask() {
 
-        final ResultBean bean = GsonStuff.initializeResultBean(GsonStuff.picturesUrl);
+			@Override
+			protected void onPostExecute(ResultBean result) {
+				MainActivity.this.postPicturesLoad(result);
+			}
+        	
+        };
+        try {
+			task.execute(new URL(GsonStuff.picturesUrl));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			Log.e("MainActivity", "Exception", e);
+		}
+        
+    }
+
+
+
+	 void postPicturesLoad(ResultBean bean) {
+		final Activity context = this;
         final ImageBean beans[];
         if (bean != null) { 
         	beans = bean.result;
@@ -65,8 +86,7 @@ public class MainActivity extends SherlockListActivity {
         
         
         setListAdapter(adapter);
-        
-    }
+	}
     
     
 
