@@ -1,6 +1,5 @@
 package com.icm;
 
-import java.net.MalformedURLException;
 import java.net.URL;
 
 import android.app.Activity;
@@ -110,8 +109,8 @@ public class MainActivity extends SherlockListActivity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		final Context context = this;
         
-		MenuItem item = menu.add("New");
-		item.setIcon(R.drawable.ic_menu_camera);
+		MenuItem item = menu.add("Take picture");
+		//item.setIcon(R.drawable.ic_menu_camera);
 		item.setShowAsAction(MenuItem.SHOW_AS_ACTION_WITH_TEXT | MenuItem.SHOW_AS_ACTION_ALWAYS);
 		//item.setTitleCondensed("New");
 		item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {

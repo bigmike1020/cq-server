@@ -16,7 +16,7 @@
         android:theme="@style/Theme.Sherlock" >
         <activity
             android:name=".MainActivity"
-            android:label="@string/title_activity_main" >
+            android:label="Top questions" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -25,11 +25,11 @@
         
         <activity
             android:name=".TakePictureActivity"
-            android:label="Take picture" />
+            android:label="Take a picture!" />
 
         <activity
             android:name=".AnswerActivity"
-            android:label="Answer a question!" />
+            android:label="Answer this question?" />
         
     </application>
 
