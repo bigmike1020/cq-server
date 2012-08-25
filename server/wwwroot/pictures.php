@@ -1,16 +1,32 @@
 <?php
 
+include_once "error.php";
+
 $sql = mysqli_init() or error("Unable to init mysql");
+
+if(isset($_GET, $_GET["pic_id"])) $pic_id = $_GET["pic_id"];
 
 $sql->real_connect(ini_get("mysql.default_host"), "root") or error("Unable to connect to mysql");
 $sql->select_db('chunky') or error("Unable to select chunky db: ".$sql->error);
 
-$result = $sql->query("SELECT pictures.id AS id, ".
+$query = "SELECT pictures.id AS id, ".
 	"users.name AS user, ".
 	"pictures.rel_path AS path, ".
 	"pictures.question AS question, ".
 	"pictures.upload_date AS date ".
-	"FROM pictures INNER JOIN users ON users.id=pictures.user_id") or error("cant read from pictures table: ".$sql->error);
+	"FROM pictures INNER JOIN users ON users.id=pictures.user_id";
+	
+if(isset($pic_id))
+{
+	is_numeric($pic_id) or error("pic_id is not numeric");
+	$pic_id = intval($pic_id);
+	$pic_id or error("pic_id is not an integer");
+	
+	$query .= " WHERE pictures.id=$pic_id";
+}
+
+$result = $sql->query($query)
+	or error("cant read from pictures table: ".$sql->error);
 	
 ($result->num_rows > 0 ) or error("No pictures in db");
 	
@@ -42,18 +58,6 @@ $message .= '] }';
 
 echo $message;
 
-exit;
-
-
-
-// The following function is an error handler which is used 
-// to output an HTML error page if the file upload fails 
-function error($error, $seconds = 5) 
-{ 
-    echo '{'.
-	"\"error\": \"$error\"".
-	'}';
-    exit; 
-} // end error handler 
+$sql->close();
 
 ?>

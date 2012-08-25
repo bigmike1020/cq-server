@@ -1,5 +1,7 @@
 <?php
 
+include_once "error.php";
+
 $_GET or error("No _GET");
 
 $pic_id = $_GET["pic_id"] or error("need a pic_id");
@@ -44,18 +46,8 @@ $message .= '] }';
 
 echo $message;
 
-exit;
+$sql->close();
 
 
-
-// The following function is an error handler which is used 
-// to output an HTML error page if the file upload fails 
-function error($error, $seconds = 5) 
-{ 
-    echo '{'.
-	"\"error\": \"$error\"".
-	'}';
-    exit; 
-} // end error handler 
 
 ?>
