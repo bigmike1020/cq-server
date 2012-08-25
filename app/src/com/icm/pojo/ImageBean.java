@@ -15,6 +15,7 @@ public class ImageBean implements Serializable {
 
 	private static final String baseURL = "http://192.168.8.146/chunky/images/";
 
+	public int pic_id;
 	public String user;
 	public String path;
 	public String question;

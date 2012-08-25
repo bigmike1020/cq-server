@@ -5,7 +5,6 @@ import java.net.URL;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,11 +25,12 @@ import com.icm.util.GsonStuff;
 public class MainActivity extends SherlockListActivity {
 
 	ImageBean beans[] = null;
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        
-        ResultBeanTask task = new ResultBeanTask() {
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		
+		ResultBeanTask task = new ResultBeanTask() {
 
 			@Override
 			protected void onPostExecute(ResultBean result) {
@@ -44,12 +44,11 @@ public class MainActivity extends SherlockListActivity {
 			// TODO Auto-generated catch block
 			Log.e("MainActivity", "Exception", e);
 		}
-        
-    }
+	}
 
 
 
-	 void postPicturesLoad(ResultBean bean) {
+	void postPicturesLoad(ResultBean bean) {
 		final Activity context = this;
         final ImageBean beans[];
         if (bean != null) { 
@@ -74,7 +73,7 @@ public class MainActivity extends SherlockListActivity {
 					imageView.setImageDrawable(bean.loadDrawable());
 				
 					TextView textView = (TextView) row.findViewById(R.id.row_textView);
-					textView.setText(position + ": " + bean.user + " -- " + bean.question);
+					textView.setText(bean.user + " -- " + bean.question);
 					
 				}
 				return row;
@@ -96,7 +95,8 @@ public class MainActivity extends SherlockListActivity {
 		Intent intent = new Intent();
 		intent.setClass(this, AnswerActivity.class);
 		
-		intent.putExtra("id", (int)id+1);
+		intent.putExtra("id", beans[(int)id].pic_id);
+		intent.putExtra("question", beans[(int)id].question);
 		intent.putExtra("path", beans[(int)id].path);
 		
 		
