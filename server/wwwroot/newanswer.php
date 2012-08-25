@@ -23,7 +23,7 @@ $userid = getUserId($sql, $user)
 
 $sql->query("INSERT INTO answers (user_id, answer, picture_id) VALUES (".
 	"$userid,".
-	$sql->real_escape_string($answer).",".
+	"'".$sql->real_escape_string($answer)."',".
 	$sql->real_escape_string($pic_id).
 	")") 
 	or error("unable to insert into answers: ".$sql->error);
