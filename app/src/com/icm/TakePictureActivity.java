@@ -125,11 +125,11 @@ public class TakePictureActivity extends SherlockActivity {
 	}
 	
 	private void setImageInView(Bitmap photo){
-		imageView.setDrawingCacheEnabled(true);
+		//imageView.setDrawingCacheEnabled(true);
 		imageView.setImageBitmap(photo);
-		imageView.buildDrawingCache(true);
-		uploadedImage = Bitmap.createBitmap(imageView.getDrawingCache());
-		imageView.setDrawingCacheEnabled(false);
+		//imageView.buildDrawingCache(true);
+		uploadedImage = photo;//Bitmap.createBitmap(imageView.getDrawingCache());
+		//imageView.setDrawingCacheEnabled(false);
 		
         imageView.setVisibility(View.VISIBLE);
 		questionText.setVisibility(View.VISIBLE);
