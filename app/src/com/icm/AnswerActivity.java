@@ -19,6 +19,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.MenuItem;
@@ -40,6 +41,10 @@ public class AnswerActivity extends SherlockActivity {
 		AnswerResultBean resultBean = GsonStuff.beanFromPictureId(id);
 		
 		if (resultBean != null) {
+			TextView textView = (TextView) findViewById(R.id.answer_questionTextView);
+			//textView.setText(resultBean)
+			
+			
 			ListView listView = (ListView) findViewById(R.id.answer_list_view);
 			String array[] = new String[resultBean.result.length];
 			for(int i = 0; i < array.length && i < 3; i++) {
