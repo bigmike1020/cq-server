@@ -41,6 +41,7 @@ public class AnswerActivity extends SherlockActivity {
 		
 		ImageView imageView = (ImageView)findViewById(R.id.answer_imageView);
 		imageView.setImageDrawable(drawable);
+		
 		final EditText answerEditText = (EditText) findViewById(R.id.editTextAnswer);
 		
 		findViewById(R.id.button1).setOnClickListener(new View.OnClickListener() {
