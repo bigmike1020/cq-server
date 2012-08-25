@@ -3,11 +3,11 @@
 include_once "error.php";
 include_once "newuser.php";
 
-$_GET or error("No _GET");
+$_POST or error("No _GET");
 
-$pic_id = $_GET["pic_id"] or error("need a pic_id");
-$answer = $_GET["answer"] or error("need an answer");
-$user = $_GET["user"] or error("need a user");
+$pic_id = $_POST["pic_id"] or error("need a pic_id");
+$answer = $_POST["answer"] or error("need an answer");
+$user = $_POST["user"] or error("need a user");
 
 is_numeric($pic_id) or error("pic_id is not numeric");
 $pic_id = intval($pic_id);
