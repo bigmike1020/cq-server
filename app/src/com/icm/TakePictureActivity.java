@@ -111,11 +111,12 @@ public class TakePictureActivity extends SherlockActivity {
 	}
 	
 	private void setImageInView(Bitmap photo){
-		imageView.setDrawingCacheEnabled(true);
+		//imageView.setDrawingCacheEnabled(true);
 		imageView.setImageBitmap(photo);
-		imageView.buildDrawingCache(true);
-		uploadedImage = Bitmap.createBitmap(imageView.getDrawingCache());
-		imageView.setDrawingCacheEnabled(false);
+		//imageView.buildDrawingCache(true);
+		uploadedImage = photo;//Bitmap.createBitmap(imageView.getDrawingCache());
+		//imageView.setDrawingCacheEnabled(false);
+		//uploadedImage = photo;
 		
         imageView.setVisibility(View.VISIBLE);
 		questionText.setVisibility(View.VISIBLE);
@@ -128,7 +129,12 @@ public class TakePictureActivity extends SherlockActivity {
 		
 		UploadArgs arg = new UploadArgs();
 		arg.question = (String) questionText.getText().toString();
-		arg.username = (String) userName.getText().toString();
+		
+		String username = userName.getText().toString();
+		if (username == null || username.equals("")) {
+			username = "Anonymous";
+		}
+		arg.username = username;
 		arg.image = uploadedImage;
 		
 		UploadPictureTask task= new UploadPictureTask();

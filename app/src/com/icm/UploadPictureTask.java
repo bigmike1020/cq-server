@@ -17,7 +17,6 @@ import org.apache.http.message.BasicNameValuePair;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.util.Base64;
-import android.util.Log;
 
 public class UploadPictureTask extends AsyncTask<UploadArgs, Void, Void> {
 
@@ -36,9 +35,7 @@ public class UploadPictureTask extends AsyncTask<UploadArgs, Void, Void> {
             ByteArrayOutputStream bao = new ByteArrayOutputStream();
             arg.image.compress(Bitmap.CompressFormat.JPEG, 90, bao);
             byte [] ba = bao.toByteArray();
-            Log.w("myApp", "8");
             int flags = Base64.DEFAULT;
-            Log.w("myApp", "9");
             String ba1=Base64.encodeToString(ba, flags);
             
             nameValuePairs.add(new BasicNameValuePair("file", ba1));
@@ -48,7 +45,6 @@ public class UploadPictureTask extends AsyncTask<UploadArgs, Void, Void> {
 
             // Execute HTTP Post Request
             HttpResponse response = httpclient.execute(httppost);
-
         } catch (ClientProtocolException e) {
             // TODO Auto-generated catch block
         } catch (IOException e) {

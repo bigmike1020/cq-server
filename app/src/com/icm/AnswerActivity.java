@@ -42,7 +42,7 @@ public class AnswerActivity extends SherlockActivity {
 		
 		if (resultBean != null) {
 			TextView textView = (TextView) findViewById(R.id.answer_questionTextView);
-			//textView.setText(resultBean)
+			textView.setText(getIntent().getStringExtra("question"));
 			
 			
 			ListView listView = (ListView) findViewById(R.id.answer_list_view);
