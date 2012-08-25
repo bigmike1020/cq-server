@@ -8,6 +8,7 @@ import android.os.Bundle;
 
 import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
 
 import android.view.View;
 import android.widget.Button;
@@ -22,6 +23,8 @@ public class TakePictureActivity extends SherlockActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_takepicture);
+		getSupportActionBar().setHomeButtonEnabled(true);
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         this.imageView = (ImageView)this.findViewById(R.id.imageView1);
         Button cameraButton = (Button) this.findViewById(R.id.button1);
         cameraButton.setOnClickListener(new View.OnClickListener(){
@@ -53,5 +56,14 @@ public class TakePictureActivity extends SherlockActivity {
 			Bitmap photo = (Bitmap) data.getExtras().get("data");
 			imageView.setImageBitmap(photo);
 		}
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		if (item.getItemId() == android.R.id.home) {
+			onBackPressed();
+		}
+		
+		return true;
 	}
 }
