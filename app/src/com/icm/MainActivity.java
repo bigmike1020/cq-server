@@ -77,7 +77,7 @@ public class MainActivity extends SherlockListActivity {
 		Intent intent = new Intent();
 		intent.setClass(this, AnswerActivity.class);
 		
-		intent.putExtra("id", (int)id);
+		intent.putExtra("id", (int)id+1);
 		intent.putExtra("path", beans[(int)id].path);
 		
 		

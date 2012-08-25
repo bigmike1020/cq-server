@@ -14,7 +14,7 @@ public class AnswerResultBeanTask extends
 
 	@Override
 	protected AnswerResultBean doInBackground(URL... params) {
-URL url = params[0];
+		URL url = params[0];
 		
 		try {
 	    	Gson gson = new Gson();
