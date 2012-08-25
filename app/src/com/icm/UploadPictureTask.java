@@ -44,7 +44,7 @@ public class UploadPictureTask extends AsyncTask<UploadArgs, Void, Void> {
             Log.w("myApp", "7");
             byte [] ba = bao.toByteArray();
             Log.w("myApp", "8");
-            int flags = Base64.NO_WRAP | Base64.URL_SAFE;
+            int flags = Base64.DEFAULT;
             Log.w("myApp", "9");
             String ba1=Base64.encodeToString(ba, flags);
             Log.w("myApp", "10");
