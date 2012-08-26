@@ -67,6 +67,7 @@ public class MainActivity extends SherlockListActivity {
 				if (convertView == null) {
 					LayoutInflater inflater = context.getLayoutInflater();
 					row = inflater.inflate(R.layout.table_main_row, null);
+				}
 					
 					ImageBean bean = getItem(position);
 					ImageView imageView = (ImageView) row.findViewById(R.id.row_imageView);
@@ -75,7 +76,6 @@ public class MainActivity extends SherlockListActivity {
 					TextView textView = (TextView) row.findViewById(R.id.row_textView);
 					textView.setText(bean.user + " -- " + bean.question);
 					
-				}
 				return row;
 				
 			}

@@ -88,8 +88,8 @@ public class AnswerActivity extends SherlockActivity {
 			textView.setText(getIntent().getStringExtra("question"));
 			
 			
-			String array[] = new String[resultBean.result.length];
-			for(int i = 0; i < array.length && i < 3; i++) {
+			String array[] = new String[Math.min(resultBean.result.length, 3)];
+			for(int i = 0; i < resultBean.result.length && i < 3; i++) {
 				array[i] = resultBean.result[i].user + " -- " + resultBean.result[i].answer;
 			}
 			
