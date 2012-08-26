@@ -14,7 +14,8 @@ $query = "SELECT pictures.id AS id, ".
 	"pictures.rel_path AS path, ".
 	"pictures.question AS question, ".
 	"pictures.upload_date AS date ".
-	"FROM pictures INNER JOIN users ON users.id=pictures.user_id";
+	"FROM pictures INNER JOIN users ON users.id=pictures.user_id ".
+	"ORDER BY pictures.upload_date DESC";
 	
 if(isset($pic_id))
 {

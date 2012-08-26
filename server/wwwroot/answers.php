@@ -19,7 +19,7 @@ $result = $sql->query("SELECT answers.answer AS answer, ".
 	"users.name AS user, ".
 	"answers.date AS date ".
 	"FROM answers INNER JOIN users ON users.id=answers.user_id WHERE answers.picture_id=".$pic_id." ".
-	"ORDER BY answers.date")
+	"ORDER BY answers.date DESC")
 	or error("cant read from answers table: ".$sql->error);
 	
 $message = '{ "result": [';
