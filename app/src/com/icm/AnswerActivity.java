@@ -38,22 +38,8 @@ public class AnswerActivity extends SherlockActivity {
 		
 		String path = getIntent().getStringExtra("path");
 		final int id = getIntent().getIntExtra("id", 1);
-		AnswerResultBean resultBean = GsonStuff.beanFromPictureId(id);
 		
-		if (resultBean != null) {
-			TextView textView = (TextView) findViewById(R.id.answer_questionTextView);
-			textView.setText(getIntent().getStringExtra("question"));
-			
-			
-			ListView listView = (ListView) findViewById(R.id.answer_list_view);
-			String array[] = new String[resultBean.result.length];
-			for(int i = 0; i < array.length && i < 3; i++) {
-				array[i] = resultBean.result[i].user + " -- " + resultBean.result[i].answer;
-			}
-			
-			ListAdapter adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, array);
-			listView.setAdapter(adapter);
-		}
+		setTheListAdapter(id);
 		
 		ImageBean bean = new ImageBean();
 		bean.path = path;
@@ -87,8 +73,29 @@ public class AnswerActivity extends SherlockActivity {
 						}
 					}
 				}.start(); // lol
+				AnswerActivity.this.finish();
 			}
 		});
+	}
+	
+	private void setTheListAdapter(int id) { 
+
+		AnswerResultBean resultBean = GsonStuff.beanFromPictureId(id);
+		final ListView listView = (ListView) findViewById(R.id.answer_list_view);
+		
+		if (resultBean != null) {
+			TextView textView = (TextView) findViewById(R.id.answer_questionTextView);
+			textView.setText(getIntent().getStringExtra("question"));
+			
+			
+			String array[] = new String[resultBean.result.length];
+			for(int i = 0; i < array.length && i < 3; i++) {
+				array[i] = resultBean.result[i].user + " -- " + resultBean.result[i].answer;
+			}
+			
+			ListAdapter adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, array);
+			listView.setAdapter(adapter);
+		}
 	}
 	
 

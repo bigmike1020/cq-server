@@ -29,7 +29,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/imageView1"
         android:layout_alignParentRight="true"
-        android:text="Upload picture" />
+        android:text="Existing picture" />
     
 
     <EditText
