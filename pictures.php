@@ -1,13 +1,10 @@
 <?php
 
 include_once "util.php";
+use util\error;
 
-$sql = mysqli_init() or error("Unable to init mysql");
-
-if(isset($_GET, $_GET["pic_id"])) $pic_id = $_GET["pic_id"];
-
-$sql->real_connect(ini_get("mysql.default_host"), "root") or error("Unable to connect to mysql");
-$sql->select_db('chunky') or error("Unable to select chunky db: ".$sql->error);
+$sql = new util\sqldb()
+  or error("Unable to init mysql");
 
 $query = "SELECT pictures.id AS id, ".
 	"users.name AS user, ".
@@ -16,12 +13,15 @@ $query = "SELECT pictures.id AS id, ".
 	"pictures.upload_date AS date ".
 	"FROM pictures INNER JOIN users ON users.id=pictures.user_id ".
 	"ORDER BY pictures.upload_date DESC";
-	
+
+if(isset($_GET, $_GET["pic_id"])) $pic_id = $_GET["pic_id"];
+
 if(isset($pic_id))
 {
-	is_numeric($pic_id) or error("pic_id is not numeric");
-	$pic_id = intval($pic_id);
-	$pic_id or error("pic_id is not an integer");
+	is_numeric($pic_id) 
+    or error("pic_id is not numeric");
+	$pic_id = intval($pic_id)
+    or error("pic_id cannot be 0");
 	
 	$query .= " WHERE pictures.id=$pic_id";
 }
@@ -29,12 +29,10 @@ if(isset($pic_id))
 $result = $sql->query($query)
 	or error("cant read from pictures table: ".$sql->error);
 	
-($result->num_rows > 0 ) or error("No pictures in db");
-	
 $message = '{ "result": [';
 $id = 0;
 
-while( ($row = $result->fetch_array()) )
+while( ($row = $result->fetchArray()) )
 {	
 	if($id != 0) $message .= ",\n";
 
@@ -58,7 +56,5 @@ while( ($row = $result->fetch_array()) )
 $message .= '] }';
 
 echo $message;
-
-$sql->close();
 
 ?>
