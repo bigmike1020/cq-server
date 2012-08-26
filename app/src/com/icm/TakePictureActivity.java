@@ -7,12 +7,17 @@ import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.CoreProtocolPNames;
 import org.apache.http.params.HttpParams;
 
+import com.actionbarsherlock.app.SherlockActivity;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
+
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
@@ -20,10 +25,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.actionbarsherlock.app.SherlockActivity;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuItem;
 
 public class TakePictureActivity extends SherlockActivity {
 	private static final int CAMERA_REQUEST = 1000;
@@ -121,6 +122,37 @@ public class TakePictureActivity extends SherlockActivity {
 		userName.setVisibility(View.VISIBLE);
 	}
 	
+	@Override
+  protected void onRestoreInstanceState(Bundle savedInstanceState) {
+	  
+		try {
+			Parcelable image = savedInstanceState.getParcelable("SavedImage");
+			if(image instanceof Bitmap)
+			{
+				this.uploadedImage = (Bitmap) image;
+			}
+		}
+		catch(Exception e)
+		{
+			Log.e("TakePictureActivity", "Exception", e);
+		}
+	  
+	  super.onRestoreInstanceState(savedInstanceState);
+  }
+
+	@Override
+  protected void onSaveInstanceState(Bundle outState) {
+	  super.onSaveInstanceState(outState);
+	  
+	  try {
+	  	outState.putParcelable("SavedImage", uploadedImage);
+	  }
+	  catch(Exception e)
+	  {
+	  	Log.e("TakePictureActivity", "Exception", e);
+	  }
+  }
+
 	public void Upload(){
 		
 		UploadArgs arg = new UploadArgs();
