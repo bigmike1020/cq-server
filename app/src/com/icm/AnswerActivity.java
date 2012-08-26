@@ -73,6 +73,7 @@ public class AnswerActivity extends SherlockActivity {
 						}
 					}
 				}.start(); // lol
+				AnswerActivity.this.finish();
 			}
 		});
 	}
