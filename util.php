@@ -70,7 +70,7 @@ class sqldb
     return $db->lastInsertRowID();
   }
   
-  function escapeString($value)
+  function escape_string($value)
   {
     return $db->escapeString($value);
 	}
