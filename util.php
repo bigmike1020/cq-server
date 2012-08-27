@@ -1,6 +1,6 @@
 <?php
 
-$util_dir = "./hidden/";
+$util_dir = "hidden/";
 
 // The following function is an error handler which is used 
 // to output an json error message and exit immediately
@@ -24,7 +24,7 @@ class sqldb
 
 	function __construct()
 	{
-		$db = new SQLite3($util_dir."database.sqlite");
+		$db = new PDO('sqlite:'.$util_dir."database.sqlite");
 		
 		$db->querySingle("SELECT value FROM global WHERE key='version'")
 			or create();
