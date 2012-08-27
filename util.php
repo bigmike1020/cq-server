@@ -25,15 +25,15 @@ class sqldb
 	function __construct()
 	{
     global $util_dir;
-		$db = new SQLiteDatabase("sqlite:".$util_dir."database.sqlite");
+		$this->db = new SQLiteDatabase($util_dir."database.sqlite");
 		
-		$db->query("SELECT value FROM global WHERE key='version'")
+		$this->db->query("SELECT value FROM global WHERE key='version'")
 			or $this->create();
 	}
 	
 	function __destruct()
 	{
-		$db = NULL;
+		$this->db = NULL;
 	}
 	
 	protected function create()
@@ -42,36 +42,36 @@ class sqldb
 		$create_script = file_get_contents($util_dir."create.sql")
 			or error("Unable to read db create script");
 	
-		$db->exec($create_script)
-			or error("Unable to create sqlite database: ".$db->lastErrorMsg);
+		$this->db->exec($create_script)
+			or error("Unable to create sqlite database: ".$this->db->lastErrorMsg);
 	}
 	
 	function query($query_string)
 	{
-		return $db->query($query_string);
+		return $this->db->query($query_string);
 	}
   
   function querySingle($queryString)
   {
-    $result = $db->query($queryString)
-      or error("Unable to querySingle:".$this->error();
+    $result = $this->db->query($queryString)
+      or error("Unable to querySingle:".$this->error());
     
     return $result->fetchSingle();
   }
   
   function error()
   {
-    return $db->errorString();
+    return $this->db->errorString();
   }
   
   function insert_id()
   {
-    return $db->lastInsertRowId();
+    return $this->db->lastInsertRowId();
   }
   
   function escape_string($value)
   {
-    return $db->escape($value);
+    return $this->db->escape($value);
 	}
   
 }
