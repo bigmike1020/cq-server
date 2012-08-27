@@ -1,7 +1,10 @@
 <?php
 
 include_once "util.php";
-use util\error;
+function error($message) {
+  return Util\error($message);
+}
+
 
 $_POST or error("No _GET");
 

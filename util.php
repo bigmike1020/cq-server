@@ -1,5 +1,5 @@
 <?php
-namespace util;
+namespace Util;
 
 $util_dir = "./hidden/";
 
