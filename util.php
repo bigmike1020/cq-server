@@ -42,7 +42,7 @@ class sqldb
 		$create_script = file_get_contents($util_dir."create.sql")
 			or error("Unable to read db create script");
 	
-		$this->db->exec($create_script)
+		$this->db->queryExec($create_script)
 			or error("Unable to create sqlite database: ".$this->db->lastErrorMsg);
 	}
 	
