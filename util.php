@@ -24,19 +24,21 @@ class sqldb
 
 	function __construct()
 	{
-		$db = new PDO('sqlite:'.$util_dir."database.sqlite");
+    global $util_dir;
+		$db = new SQLiteDatabase("sqlite:".$util_dir."database.sqlite");
 		
-		$db->querySingle("SELECT value FROM global WHERE key='version'")
-			or create();
+		$db->query("SELECT value FROM global WHERE key='version'")
+			or $this->create();
 	}
 	
 	function __destruct()
 	{
-		$db->close();
+		$db = NULL;
 	}
 	
 	protected function create()
 	{
+    global $util_dir;
 		$create_script = file_get_contents($util_dir."create.sql")
 			or error("Unable to read db create script");
 	
@@ -51,27 +53,25 @@ class sqldb
   
   function querySingle($queryString)
   {
-    return $db->querySingle();
+    $result = $db->query($queryString)
+      or error("Unable to querySingle:".$this->error();
+    
+    return $result->fetchSingle();
   }
-	
-	function changes()
-	{
-		return $db->changes();
-	}
   
   function error()
   {
-    return $db->lastErrorMsg();
+    return $db->errorString();
   }
   
   function insert_id()
   {
-    return $db->lastInsertRowID();
+    return $db->lastInsertRowId();
   }
   
   function escape_string($value)
   {
-    return $db->escapeString($value);
+    return $db->escape($value);
 	}
   
 }
