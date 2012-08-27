@@ -27,7 +27,7 @@ $result = $sql->query("SELECT answers.answer AS answer, ".
 $message = '{ "result": [';
 $id = 0;
 
-while( ($row = $result->fetchArray()) )
+while( ($row = $result->fetch()) )
 {	
 	if($id != 0) $message .= ",\n";
 

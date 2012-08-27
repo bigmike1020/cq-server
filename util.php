@@ -27,7 +27,7 @@ class sqldb
     global $util_dir;
 		$this->db = new SQLiteDatabase($util_dir."database.sqlite");
 		
-		$this->db->query("SELECT value FROM global WHERE key='version'")
+		$this->db->query("SELECT cCalue FROM tGlobal WHERE key='version'")
 			or $this->create();
 	}
 	
@@ -81,7 +81,7 @@ function getUserId($sql, $username)
 	isset($sql, $username)
     or error("getUserId not called with sql and username");
   
-	$result = $sql->querySingle("SELECT users.id AS user_id FROM users WHERE users.name='".$username."'");
+	$result = $sql->querySingle("SELECT tUsers.cId AS user_id FROM tUsers WHERE tUsers.cName='".$username."'");
 	
   if($result)
   {
@@ -89,7 +89,7 @@ function getUserId($sql, $username)
   }
   elseif(isset($result))
 	{
-		$sql->query("INSERT INTO users (name) VALUES ('$username')")
+		$sql->query("INSERT INTO tUsers (cName) VALUES ('$username')")
 			or error("cant insert new user:".$sql->error);
 		$userid = $sql->insert_id;
 	}

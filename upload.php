@@ -38,7 +38,7 @@ saveImage($image, $dir.$filename);
 $userid = getUserId($sql, $username)
 	or error("cant find userid");
 
-$sql->query("INSERT INTO pictures (user_id, rel_path, question) VALUES ('$userid', '$uploadFilename', '$question')")
+$sql->query("INSERT INTO tPictures (cUser_id, cRel_path, cQuestion) VALUES ('$userid', '$uploadFilename', '$question')")
 	or error("cant insert into pictures");
 	
 $id = $sql->insert_id 

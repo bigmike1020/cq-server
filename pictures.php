@@ -5,13 +5,13 @@ include_once "util.php";
 $sql = new sqldb()
   or error("Unable to init mysql");
 
-$query = "SELECT pictures.id AS id, ".
-	"users.name AS user, ".
-	"pictures.rel_path AS path, ".
-	"pictures.question AS question, ".
-	"pictures.upload_date AS date ".
-	"FROM pictures INNER JOIN users ON users.id=pictures.user_id ".
-	"ORDER BY pictures.upload_date DESC";
+$query = "SELECT tPictures.cId AS id, ".
+	"tUsers.cName AS user, ".
+	"tPictures.cRel_path AS path, ".
+	"tPictures.cQuestion AS question, ".
+	"tPictures.tUpload_date AS date ".
+	"FROM tPictures INNER JOIN tUsers ON tUsers.cId=tPictures.cUser_id ".
+	"ORDER BY tPictures.cUpload_date DESC";
 
 if(isset($_GET, $_GET["pic_id"])) $pic_id = $_GET["pic_id"];
 
@@ -31,7 +31,7 @@ $result = $sql->query($query)
 $message = '{ "result": [';
 $id = 0;
 
-while( ($row = $result->fetchArray()) )
+while( ($row = $result->fetch()) )
 {	
 	if($id != 0) $message .= ",\n";
 
