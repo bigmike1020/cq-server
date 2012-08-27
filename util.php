@@ -91,7 +91,7 @@ function getUserId($sql, $username)
 	{
 		$sql->query("INSERT INTO tUsers (cName) VALUES ('$username')")
 			or error("cant insert new user:".$sql->error);
-		$userid = $sql->insert_id;
+		$userid = $sql->insert_id();
 	}
 	else error("Unable to query for user ids:".$sql->error);
 	

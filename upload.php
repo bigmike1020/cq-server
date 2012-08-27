@@ -41,7 +41,7 @@ $userid = getUserId($sql, $username)
 $sql->query("INSERT INTO tPictures (cUser_id, cRel_path, cQuestion) VALUES ('$userid', '$uploadFilename', '$question')")
 	or error("cant insert into pictures");
 	
-$id = $sql->insert_id 
+$id = $sql->insert_id()
   or error("error inserting into db");
 
 $message = '{ '.
