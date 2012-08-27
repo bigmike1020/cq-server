@@ -1,10 +1,6 @@
 <?php
 
 include_once "util.php";
-function error($message) {
-  return Util\error($message);
-}
-
 
 $_POST or error("No _GET");
 
@@ -21,7 +17,7 @@ $pic_id = intval($pic_id);
 $pic_id 
   or error("pic_id is not an integer");
 
-$sql = new util\sqldb() 
+$sql = new sqldb() 
   or error("Unable to init sql");
 
 $userid = getUserId($sql, $user)

@@ -1,14 +1,10 @@
 <?php 
 
 include_once "util.php";
-function error($message) {
-  return Util\error($message);
-}
-
 
 $_POST or error("No POST");
 
-$sql = new util\sqldb()
+$sql = new sqldb()
   or error("Unable to init mysql");
 
 $username = $sql->escape_string($_POST["username"]) 

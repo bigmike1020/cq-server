@@ -1,9 +1,6 @@
 <?php
 
 include_once "util.php";
-function error($message) {
-  return Util\error($message);
-}
 
 isset($_GET) or error("No _GET");
 
@@ -16,7 +13,7 @@ $pic_id = intval($pic_id);
 $pic_id 
   or error("pic_id is not an integer");
 
-$sql = new util\sqldb() 
+$sql = new sqldb() 
   or error("Unable to init sql");
 
 $result = $sql->query("SELECT answers.answer AS answer, ".
