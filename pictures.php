@@ -9,7 +9,7 @@ $query = "SELECT tPictures.cId AS id, ".
 	"tUsers.cName AS user, ".
 	"tPictures.cRel_path AS path, ".
 	"tPictures.cQuestion AS question, ".
-	"tPictures.tUpload_date AS date ".
+	"tPictures.cUpload_date AS date ".
 	"FROM tPictures INNER JOIN tUsers ON tUsers.cId=tPictures.cUser_id ".
 	"ORDER BY tPictures.cUpload_date DESC";
 
@@ -26,7 +26,7 @@ if(isset($pic_id))
 }
 
 $result = $sql->query($query)
-	or error("cant read from pictures table: ".$sql->error);
+	or error("cant read from pictures table: ".$sql->error());
 	
 $message = '{ "result": [';
 $id = 0;

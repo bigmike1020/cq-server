@@ -16,13 +16,13 @@ $pic_id
 $sql = new sqldb() 
   or error("Unable to init sql");
 
-$result = $sql->query("SELECT answers.answer AS answer, ".
-	"users.name AS user, ".
-	"answers.date AS date ".
-	"FROM answers INNER JOIN users ON users.id=answers.user_id ".
-  "WHERE answers.picture_id=".$pic_id." ".
-	"ORDER BY answers.date DESC")
-	or error("cant read from answers table: ".$sql->error);
+$result = $sql->query("SELECT tAnswers.cAnswer AS answer, ".
+	"tUsers.cName AS user, ".
+	"tAnswers.cDate AS date ".
+	"FROM tAnswers INNER JOIN tUsers ON tUsers.cId=tAnswers.cUser_id ".
+  "WHERE tAnswers.cPicture_id=".$pic_id." ".
+	"ORDER BY tAnswers.cDate DESC")
+	or error("cant read from answers table: ".$sql->error());
 	
 $message = '{ "result": [';
 $id = 0;

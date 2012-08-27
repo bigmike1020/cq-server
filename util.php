@@ -27,7 +27,7 @@ class sqldb
     global $util_dir;
 		$this->db = new SQLiteDatabase($util_dir."database.sqlite");
 		
-		$this->db->query("SELECT cCalue FROM tGlobal WHERE key='version'")
+		$this->db->query("SELECT cValue FROM tGlobal WHERE cKey='version'")
 			or $this->create();
 	}
 	
@@ -43,7 +43,7 @@ class sqldb
 			or error("Unable to read db create script");
 	
 		$this->db->queryExec($create_script)
-			or error("Unable to create sqlite database: ".$this->db->lastErrorMsg);
+			or error("Unable to create sqlite database: ".$this->error());
 	}
 	
 	function query($query_string)
@@ -61,7 +61,7 @@ class sqldb
   
   function error()
   {
-    return $this->db->errorString();
+    return sqlite_error_string($this->db->lastError());
   }
   
   function insert_id()
