@@ -2,7 +2,7 @@
 
 include_once "util.php";
 
-$_POST or error("No _GET");
+$_POST or error("No _POST");
 
 $pic_id = $_POST["pic_id"] 
   or error("need a pic_id");
@@ -23,7 +23,7 @@ $sql = new sqldb()
 $userid = getUserId($sql, $user)
 	or error("cant get userid");
 
-$sql->query("INSERT INTO answers (user_id, answer, picture_id) VALUES (".
+$sql->query("INSERT INTO tAnswers (cUser_id, cAnswer, cPicture_id) VALUES (".
 	"$userid,".
 	"'".$sql->escape_string($answer)."',".
 	$sql->escape_string($pic_id).
@@ -31,7 +31,7 @@ $sql->query("INSERT INTO answers (user_id, answer, picture_id) VALUES (".
 	or error("unable to insert into answers: ".$sql->error);
 
 $message = "{".
-	"\"result\":".$sql->insert_id.
+	"\"result\":".$sql->insert_id().
 	"}";
 echo $message;
 

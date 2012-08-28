@@ -29,8 +29,6 @@ do
 
 // decode the image
 $image = base64_decode($fileBase64);
-getimagesizefromstring($image)
-  or error("Not a valid image");
 
 // save image to file
 saveImage($image, $dir.$filename);
@@ -38,10 +36,10 @@ saveImage($image, $dir.$filename);
 $userid = getUserId($sql, $username)
 	or error("cant find userid");
 
-$sql->query("INSERT INTO pictures (user_id, rel_path, question) VALUES ('$userid', '$uploadFilename', '$question')")
+$sql->query("INSERT INTO tPictures (cUser_id, cRel_path, cQuestion) VALUES ('$userid', '$filename', '$question')")
 	or error("cant insert into pictures");
 	
-$id = $sql->insert_id 
+$id = $sql->insert_id()
   or error("error inserting into db");
 
 $message = '{ '.
