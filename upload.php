@@ -30,6 +30,18 @@ do
 // decode the image
 $image = base64_decode($fileBase64);
 
+// drop images over 1 MB
+(strlen($image) < (1024*1024))
+  or error("Image is too big!");
+  
+// validate it really is an image
+$finfo = finfo_open();
+$info = finfo_buffer($image)
+  or error("cant read image info");
+
+preg_match('image', $info)
+  or error("File is not an image!");
+
 // save image to file
 saveImage($image, $dir.$filename);
 

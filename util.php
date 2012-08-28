@@ -6,15 +6,17 @@ $util_dir = "hidden/";
 // to output an json error message and exit immediately
 function error($error, $seconds = 5) 
 { 
-    echo '{'.
-	"\"error\": \"$error\"".
-	'}';
+  echo '{'.
+    "\"error\": \"$error\"".
+    '}';
+  
+  error_log("Error: $error");
 	
-	if(isset($uploadFilename, $uploadsDirectory))
+	if(isset($dir, $filename))
 	{
-		unlink($uploadsDirectory.$uploadFilename);
+    unlink($dir.$filename);
 	}
-    exit; 
+  exit; 
 } // end error handler 
 
 // database abstraction class
