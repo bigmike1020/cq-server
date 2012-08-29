@@ -79,7 +79,7 @@ while( ($row = $result->fetchArray()) )
 // remove unused users and answers
 $select_ids = "SELECT cId FROM tPictures";
 $sql->exec("DELETE FROM tUsers WHERE cId NOT IN (SELECT cUser_id FROM tPictures UNION SELECT cUser_id FROM tAnswers)");
-$sql->exec("DELETE FROM tAnswers WHERE cId NOT IN (SELECT cPicture_d FROM tAnswers)");
+$sql->exec("DELETE FROM tAnswers WHERE cId NOT IN (SELECT cPicture_id FROM tAnswers)");
 
 function saveImage($image, $name)
 {
