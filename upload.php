@@ -7,7 +7,7 @@ $_POST or error("No POST");
 $sql = new sqldb()
   or error("Unable to init mysql");
 
-$username = $sql->escape_string($_POST["username"]) 
+$username = $sql->escape_string($_POST["username"])
   or "Anonymous";
 $question = $sql->escape_string($_POST["question"]) 
   or error("Need a question");
@@ -35,12 +35,15 @@ $image = base64_decode($fileBase64);
   or error("Image is too big!");
   
 // validate it really is an image
-$finfo = finfo_open();
-$info = finfo_buffer($image)
+$finfo = finfo_open(FILEINFO_MIME_TYPE)
+  or error("cant open file info object");
+$info = finfo_buffer($finfo, $image)
   or error("cant read image info");
 
-preg_match('image', $info)
-  or error("File is not an image!");
+strpos(' '.$info, 'image') // space char so offset>0 on match
+  or error("File is not an image, it's a $info!");
+
+finfo_close($finfo);
 
 // save image to file
 saveImage($image, $dir.$filename);

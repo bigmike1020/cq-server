@@ -47,8 +47,7 @@ while( ($row = $result->fetch()) )
 		"\"pic_id\":\"$pic_id\",".
 		"\"user\":\"$username\",".
 		"\"path\":\"$path\",".
-		"\"question\":\"$question\",".
-		"\"date\":\"$date\"".
+		"\"question\":\"$question\"".
 	"}";
 	++$id;
 }

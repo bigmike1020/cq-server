@@ -6,9 +6,9 @@ $_POST or error("No _POST");
 
 $pic_id = $_POST["pic_id"] 
   or error("need a pic_id");
-$answer = $_POST["answer"] 
+$answer = trim($_POST["answer"]) 
   or error("need an answer");
-$user = $_POST["user"] 
+$user = trim($_POST["user"]) 
   or "Anonymous";
 
 is_numeric($pic_id) 

@@ -35,13 +35,12 @@ while( ($row = $result->fetch()) )
 	$user = $row['user'];
 	$date = $row['date'];
 	
-	($answer && $user && $date)
+	($answer && $user)
     or error("row $id is no good");
 	
 	$message .= "{".
 		"\"answer\":\"$answer\",".
-		"\"user\":\"$user\",".
-		"\"date\":\"$date\"".
+		"\"user\":\"$user\"".
 	"}";
 	++$id;
 }
