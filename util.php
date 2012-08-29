@@ -27,7 +27,7 @@ class sqldb
 	function __construct()
 	{
     global $util_dir;
-		$this->db = new SQLiteDatabase($util_dir."database.sqlite");
+		$this->db = new SQLite3($util_dir."database.sqlite");
 		
 		$this->db->query("SELECT cValue FROM tGlobal WHERE cKey='version'")
 			or $this->create();
@@ -44,7 +44,7 @@ class sqldb
 		$create_script = file_get_contents($util_dir."create.sql")
 			or error("Unable to read db create script");
 	
-		$this->db->queryExec($create_script)
+		$this->db->exec($create_script)
 			or error("Unable to create sqlite database: ".$this->error());
 	}
 	
@@ -59,6 +59,11 @@ class sqldb
       or error("Unable to querySingle:".$this->error());
     
     return $result->fetchSingle();
+  }
+  
+  function exec($queryString)
+  {
+    return $this->db->exec($queryString);
   }
   
   function error()
@@ -82,6 +87,8 @@ function getUserId($sql, $username)
 {
 	isset($sql, $username)
     or error("getUserId not called with sql and username");
+    
+  $username = trim($username);
   
 	$result = $sql->querySingle("SELECT tUsers.cId AS user_id FROM tUsers WHERE tUsers.cName='".$username."'");
 	

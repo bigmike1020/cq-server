@@ -7,10 +7,10 @@ $_POST or error("No POST");
 $sql = new sqldb()
   or error("Unable to init mysql");
 
-$username = $sql->escape_string($_POST["username"])
-  or "Anonymous";
-$question = $sql->escape_string($_POST["question"]) 
-  or error("Need a question");
+$username = trim($sql->escape_string($_POST["username"])
+  or "Anon");
+$question = trim($sql->escape_string($_POST["question"]) 
+  or error("Need a question"));
 $fileBase64 = $_POST["file"] 
   or error("need an image");
 
@@ -62,6 +62,24 @@ $message = '{ '.
 '}';
 
 echo $message;
+
+// remove old images
+$maxImage = 100;
+
+$result = $sql->query("SELECT cRel_path FROM tPictures WHERE cRel_path NOT IN (".
+  "SELECT cRel_path FROM tPictures ORDER BY cUpload_date DESC LIMIT $maxImage");
+
+while( ($row = $result->fetchArray()) )
+{
+  $filename = $row['cRel_path'];
+  $sql->exec("DELETE FROM tPictures WHERE cRel_path='$filename'");
+  unlink($dir.$filename);
+}
+
+// remove unused users and answers
+$select_ids = "SELECT cId FROM tPictures";
+$sql->exec("DELETE FROM tUsers WHERE cId NOT IN (SELECT cUser_id FROM tPictures UNION SELECT cUser_id FROM tAnswers)");
+$sql->exec("DELETE FROM tAnswers WHERE cId NOT IN (SELECT cPicture_d FROM tAnswers)");
 
 function saveImage($image, $name)
 {
