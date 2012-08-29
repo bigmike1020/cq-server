@@ -66,8 +66,7 @@ echo $message;
 // remove old images
 $maxImage = 100;
 
-$result = $sql->query("SELECT cRel_path FROM tPictures WHERE cRel_path NOT IN (".
-  "SELECT cRel_path FROM tPictures ORDER BY cUpload_date DESC LIMIT $maxImage");
+$result = $sql->query("SELECT cRel_path FROM tPictures ORDER BY cUpload_date DESC LIMIT $maxImage,-1");
 
 while( ($row = $result->fetchArray()) )
 {
@@ -79,7 +78,7 @@ while( ($row = $result->fetchArray()) )
 // remove unused users and answers
 $select_ids = "SELECT cId FROM tPictures";
 $sql->exec("DELETE FROM tUsers WHERE cId NOT IN (SELECT cUser_id FROM tPictures UNION SELECT cUser_id FROM tAnswers)");
-$sql->exec("DELETE FROM tAnswers WHERE cId NOT IN (SELECT cPicture_d FROM tAnswers)");
+$sql->exec("DELETE FROM tAnswers WHERE cId NOT IN (SELECT cPicture_id FROM tAnswers)");
 
 function saveImage($image, $name)
 {
