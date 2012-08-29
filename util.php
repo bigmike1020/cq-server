@@ -68,7 +68,7 @@ class sqldb
   
   function error()
   {
-    return sqlite_error_string($this->db->lastError());
+    return $this->db->lastErrorMsg();
   }
   
   function insert_id()

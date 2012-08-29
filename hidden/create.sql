@@ -4,13 +4,13 @@ CREATE TABLE tGlobal (
   cValue TEXT
 );
 
-INSERT INTO tGlobal (cKey, cValue) VALUES ('version', 2);
+INSERT INTO tGlobal (cKey, cValue) VALUES ('version', '2');
 
 CREATE TABLE tUsers (
   cId INTEGER PRIMARY KEY,
   cName TEXT UNIQUE COLLATE NOCASE,
   cJoin_date TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
-)
+);
 
 CREATE TABLE tPictures (
   cId INTEGER PRIMARY KEY,
@@ -18,7 +18,7 @@ CREATE TABLE tPictures (
   cUser_id INT NOT NULL,
   cQuestion TEXT NOT NULL,
   cUpload_date TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY(cUser_id) REFERENCES tUsers(cId)
+  FOREIGN KEY(cUser_id) REFERENCES tUsers(cId) ON DELETE CASCADE
 );
 
 CREATE TABLE tAnswers (
@@ -27,8 +27,8 @@ CREATE TABLE tAnswers (
   cUser_id INT NOT NULL,
   cAnswer TEXT NOT NULL,
   cDate TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY(cPicture_id) REFERENCES tPictures(cId),
-  FOREIGN KEY(cUser_id) REFERENCES tUsers(cId)
+  FOREIGN KEY(cPicture_id) REFERENCES tPictures(cId) ON DELETE CASCADE,
+  FOREIGN KEY(cUser_id) REFERENCES tUsers(cId) ON DELETE CASCADE
 );
 
 
