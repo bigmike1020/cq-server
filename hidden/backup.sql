@@ -1,0 +1,41 @@
+PRAGMA foreign_keys=OFF;
+BEGIN TRANSACTION;
+CREATE TABLE tGlobal (
+  cId INTEGER PRIMARY KEY,
+  cKey TEXT UNIQUE COLLATE NOCASE,
+  cValue TEXT
+);
+INSERT INTO "tGlobal" VALUES(1,'version','2');
+CREATE TABLE tUsers (
+  cId INTEGER PRIMARY KEY,
+  cName TEXT UNIQUE COLLATE NOCASE,
+  cJoin_date TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+INSERT INTO "tUsers" VALUES(1,'Mike','2012-08-29 04:17:52');
+INSERT INTO "tUsers" VALUES(2,'Anon','2012-08-29 04:17:52');
+INSERT INTO "tUsers" VALUES(3,'Conan','2012-08-29 04:17:52');
+CREATE TABLE tPictures (
+  cId INTEGER PRIMARY KEY,
+  cRel_path TEXT NOT NULL,
+  cUser_id INT NOT NULL,
+  cQuestion TEXT NOT NULL,
+  cUpload_date TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY(cUser_id) REFERENCES tUsers(cId)
+);
+INSERT INTO "tPictures" VALUES(1,'pic_503bf2756d340.jpeg',1,'Which mobile OS is best?','2012-08-29 04:17:52');
+INSERT INTO "tPictures" VALUES(2,'pic_503bf454431a3.jpeg',1,'Giraffe or leopard?','2012-08-29 04:17:52');
+INSERT INTO "tPictures" VALUES(3,'pic_503bf5745a32a.jpeg',1,'Who is this sexy man?','2012-08-29 04:17:52');
+INSERT INTO "tPictures" VALUES(4,'pic_503cc6a6c2cc6.jpeg',3,'What is best in life?','2012-08-29 04:17:52');
+CREATE TABLE tAnswers (
+  cId INTEGER PRIMARY KEY,
+  cPicture_id INT NOT NULL,
+  cUser_id INT NOT NULL,
+  cAnswer TEXT NOT NULL,
+  cDate TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY(cPicture_id) REFERENCES tPictures(cId) ON DELETE CASCADE,
+  FOREIGN KEY(cUser_id) REFERENCES tUsers(cId) ON DELETE CASCADE
+);
+INSERT INTO "tAnswers" VALUES(1,2,2,'is giraffe','2012-08-29 04:17:52');
+INSERT INTO "tAnswers" VALUES(2,3,2,'That is Trae.','2012-08-29 04:17:52');
+INSERT INTO "tAnswers" VALUES(3,4,2,'Beer is best.','2012-08-29 04:17:52');
+COMMIT;

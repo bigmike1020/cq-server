@@ -15,7 +15,6 @@ img
 </ul>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
 <script type="text/javascript">
-
 $.getJSON("pictures.php", function(data) {
   var questions = [];
   $.each(data.result, function(key,val) {

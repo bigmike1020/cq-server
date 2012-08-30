@@ -7,10 +7,12 @@ $_POST or error("No POST");
 $sql = new sqldb()
   or error("Unable to init mysql");
 
-$username = trim($sql->escape_string($_POST["username"])
-  or "Anon");
-$question = trim($sql->escape_string($_POST["question"]) 
-  or error("Need a question"));
+$username = $sql->escape_string($_POST["username"])
+  or "Anon";
+$username = trim($username);
+$question = $sql->escape_string($_POST["question"]) 
+  or error("Need a question");
+$question = trim($question);
 $fileBase64 = $_POST["file"] 
   or error("need an image");
 
