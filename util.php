@@ -4,13 +4,13 @@ $util_dir = "hidden/";
 
 // The following function is an error handler which is used 
 // to output an json error message and exit immediately
-function error($error, $seconds = 5) 
+function error($error) 
 { 
   echo '{'.
     "\"error\": \"$error\"".
     '}';
   
-  error_log("Error: $error");
+  error_log("CQError: $error");
 	
 	if(isset($dir, $filename))
 	{
@@ -55,10 +55,7 @@ class sqldb
   
   function querySingle($queryString)
   {
-    $result = $this->db->query($queryString)
-      or error("Unable to querySingle:".$this->error());
-    
-    return $result->fetchSingle();
+    return $this->db->querySingle($queryString);
   }
   
   function exec($queryString)
@@ -96,13 +93,13 @@ function getUserId($sql, $username)
   {
     $userid = $result;
   }
-  elseif(isset($result))
+  elseif(!isset($result))
 	{
 		$sql->query("INSERT INTO tUsers (cName) VALUES ('$username')")
-			or error("cant insert new user:".$sql->error);
+			or error("cant insert new user:".$sql->error());
 		$userid = $sql->insert_id();
 	}
-	else error("Unable to query for user ids:".$sql->error);
+	else error("Unable to query for user ids:".$sql->error());
 	
 	return $userid;
 } // end getUserId
